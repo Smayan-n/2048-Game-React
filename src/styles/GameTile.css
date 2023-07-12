@@ -1,0 +1,48 @@
+.game-tile{
+    width: 150px;
+    height: 150px;
+    top: 0;
+    left: 0;
+    transition: 2s;
+    position: relative;
+    background-color: #444;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 200%;
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .pop-anim{
+    animation: pop 0.1s ease-in-out;
+  }
+
+  .grow-anim{
+    animation: grow 0.1s ease-in-out;
+  }
+
+  @keyframes pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100%{
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes grow {
+    0% {
+      transform: scale(0.5);
+    }
+    50% {
+      transform: scale(0.8);
+    }
+    100%{
+      transform: scale(1);
+    }
+  }

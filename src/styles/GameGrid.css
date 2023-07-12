@@ -1,0 +1,26 @@
+
+
+
+  .game-grid, .tile-grid {
+    width: 635px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    grid-gap: 10px;
+    border: 10px solid red;
+    background-color: red;
+  }
+  
+  .tile-grid{
+    background-color: transparent;
+    position: absolute;
+    border: none;
+  }
+  
+  .grid-cell {
+    width: 150px;
+    height: 150px;
+    border-radius: 5px;
+    background-color: #ccc0b3;
+  }
+  
