@@ -1,7 +1,4 @@
 import { TouchEvent, useState } from "react";
-interface SwipeInput {
-	onSwipe: (direction: string) => void;
-}
 
 interface SwipeOutput {
 	onTouchStart: (e: TouchEvent) => void;
