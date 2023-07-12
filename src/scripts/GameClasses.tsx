@@ -6,6 +6,8 @@ class GameLogic {
 	private setStateTiles: React.Dispatch<React.SetStateAction<Tile[] | undefined>>;
 	private tiles2d: Tile[][] | null;
 
+	//score
+
 	constructor(tiles: Tile[] | undefined, setTiles: React.Dispatch<React.SetStateAction<Tile[] | undefined>>) {
 		this.tiles = tiles;
 		//to set state from in here
@@ -100,9 +102,6 @@ class GameLogic {
 			//after animation update to right coordinates
 			setTimeout(() => {
 				style.transition = "auto";
-				// //value and re-render do same thing
-				// style.gridRow = to.row.toString();
-				// style.gridColumn = to.col.toString();
 
 				style.top = "0";
 				style.left = "0";
@@ -161,8 +160,8 @@ class Tile {
 		tileTo.setValue(prevVal);
 		if (mergeTiles) {
 			tileTo.setValue(prevVal + tileTo.getValue());
+			tileTo.tileMerged = true;
 		}
-		tileTo.tileMerged = mergeTiles;
 	}
 
 	isMerged() {

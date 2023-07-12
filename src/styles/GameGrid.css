@@ -2,13 +2,14 @@
 
 
   .game-grid, .tile-grid {
-    width: 635px;
+    width: 37vw;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    grid-gap: 10px;
-    border: 10px solid red;
-    background-color: red;
+    grid-gap: 1.5vw;
+    border: 2vw solid var(--grid-border-color);
+    border-radius: 4px;
+    background-color: var(--grid-border-color);
   }
   
   .tile-grid{
@@ -18,9 +19,9 @@
   }
   
   .grid-cell {
-    width: 150px;
-    height: 150px;
-    border-radius: 5px;
-    background-color: #ccc0b3;
+    width: var(--tile-size);
+    height: var(--tile-size);
+    border-radius: 4px;
+    background-color: var(--grid-background-color);
   }
   

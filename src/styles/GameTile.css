@@ -1,14 +1,13 @@
 .game-tile{
-    width: 150px;
-    height: 150px;
+    width: var(--tile-size);
+    height:var(--tile-size);
     top: 0;
     left: 0;
-    transition: 2s;
     position: relative;
-    background-color: #444;
     color: #fff;
-    border-radius: 5px;
-    font-size: 200%;
+    border-radius: 4px;
+    font-size: 2.5vw;
+    font-weight: 500;
   
     display: flex;
     justify-content: center;

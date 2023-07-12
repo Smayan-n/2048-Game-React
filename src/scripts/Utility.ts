@@ -24,6 +24,7 @@ function getTileSlidePositions(tiles: Tile[][], direction: string): TileSlidePos
 		//if both to and from positions are equal, then dont add to tileSlidePositions
 		if (pos.from.row !== pos.to.row || pos.from.col !== pos.to.col) {
 			tileSlidePositions.push(pos);
+			//update tile here itself so the next search will be successful
 			tile.slideTile(tiles[toPos.row - 1][toPos.col - 1], flag);
 		}
 	};

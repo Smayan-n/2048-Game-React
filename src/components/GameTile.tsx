@@ -11,7 +11,7 @@ function GameTile(props: GameTileProps) {
 
 	//for color of tile based on value
 	const tileColorMap: { [key: number]: string } = {
-		2: "grey",
+		2: "#893d3c",
 		4: "orange",
 		8: "green",
 		16: "blue",

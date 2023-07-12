@@ -3,8 +3,13 @@ import { GameLogic, Tile } from "../scripts/GameClasses";
 import "../styles/GameGrid.css";
 import GameTile from "./GameTile";
 
-function GameGrid() {
-	const [game, setGame] = useState<GameLogic | null>(null);
+interface GameGridProps {
+	game: GameLogic | null;
+	setGame: (game: GameLogic) => void;
+}
+
+function GameGrid(props: GameGridProps) {
+	const { game, setGame } = props;
 	const [tiles, setTiles] = useState<Tile[] | undefined>([]);
 
 	useEffect(() => {
@@ -51,13 +56,8 @@ function GameGrid() {
 		};
 	}, [handleKeyPress]);
 
-	const handleClick = () => {
-		game?.startGame();
-	};
-
 	return (
 		<>
-			<button onClick={handleClick}>Click Me</button>
 			<div className="game-grid">
 				<div className="grid-cell"></div>
 				<div className="grid-cell"></div>
