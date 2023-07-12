@@ -3,6 +3,7 @@ import GameLogic from "../scripts/GameLogic";
 import Tile from "../scripts/Tile";
 import "../styles/GameGrid.css";
 import GameTile from "./GameTile";
+import useSwipe from "./useSwipe";
 
 interface GameGridProps {
 	game: GameLogic | null;
@@ -32,26 +33,10 @@ function GameGrid(props: GameGridProps) {
 	}, [setGame]);
 
 	//handle keyboard key press
+	//TODO: prevent key hold
 	const handleKeyPress = useCallback(
 		(event: KeyboardEvent) => {
-			const keyPress: string = event.key;
-			if (
-				keyPress === "ArrowUp" ||
-				keyPress === "ArrowDown" ||
-				keyPress === "ArrowLeft" ||
-				keyPress === "ArrowRight"
-			) {
-				const generateNew = game?.slide(keyPress);
-				// generate new tile - should only generate when at least 1 tile has moved
-				setTimeout(() => {
-					if (generateNew) {
-						game?.addNewTile();
-						//update score each time a tile is moved
-						//if .getScore() results in a falsy value, 0 will be used instead
-						onScoreChange(game?.getScore() || 0);
-					}
-				}, 130);
-			}
+			handleMove(event.key);
 		},
 		[game, onScoreChange]
 	);
@@ -64,9 +49,32 @@ function GameGrid(props: GameGridProps) {
 		};
 	}, [handleKeyPress]);
 
+	const handleMove = (direction: string) => {
+		if (
+			direction === "ArrowUp" ||
+			direction === "ArrowDown" ||
+			direction === "ArrowLeft" ||
+			direction === "ArrowRight"
+		) {
+			const generateNew = game?.slide(direction);
+			// generate new tile - should only generate when at least 1 tile has moved
+			setTimeout(() => {
+				if (generateNew) {
+					game?.addNewTile();
+					//update score each time a tile is moved
+					//if .getScore() results in a falsy value, 0 will be used instead
+					onScoreChange(game?.getScore() || 0);
+				}
+			}, 140);
+		}
+	};
+
+	//--------------------------------------------------------------------------------
+	const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe(handleMove);
+
 	return (
 		<>
-			<div className="game-grid">
+			<div className="game-grid" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
 				<div className="grid-cell"></div>
 				<div className="grid-cell"></div>
 				<div className="grid-cell"></div>
