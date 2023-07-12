@@ -1,4 +1,4 @@
-import { Tile } from "../scripts/Utility";
+import Tile from "../scripts/Tile";
 import "../styles/GameTile.css";
 
 interface GameTileProps {

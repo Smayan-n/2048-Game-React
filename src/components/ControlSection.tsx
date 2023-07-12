@@ -2,10 +2,12 @@ import "../styles/ControlSection.css";
 
 interface ControlSectionProps {
 	onGameStart: () => void;
+	score: number;
+	highScore: number;
 }
 
 function ControlSection(props: ControlSectionProps) {
-	const { onGameStart } = props;
+	const { onGameStart, score, highScore } = props;
 
 	return (
 		<>
@@ -15,16 +17,16 @@ function ControlSection(props: ControlSectionProps) {
 					<div className="display-section">
 						<div className="score-div">
 							Score
-							<div className="score-text">22</div>
+							<div className="score-text">{score === -1 ? 0 : score}</div>
 						</div>
 						<div className="high-score-div">
 							High Score
-							<div className="score-text">22</div>
+							<div className="score-text">{highScore}</div>
 						</div>
 					</div>
 					<div className="button-section">
 						<button onClick={onGameStart} className="start-btn">
-							Start Game
+							{score === -1 ? "Start Game" : "New Game"}
 						</button>
 					</div>
 				</section>
