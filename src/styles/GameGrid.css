@@ -2,12 +2,12 @@
 
 
   .game-grid, .tile-grid {
-    width: 37vw;
+    width: 34vw;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    grid-gap: 1.5vw;
-    border: 2vw solid var(--grid-border-color);
+    grid-gap: 1.3vw;
+    border: 1.3vw solid var(--grid-border-color);
     border-radius: 4px;
     background-color: var(--grid-border-color);
   }

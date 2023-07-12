@@ -9,6 +9,9 @@ class GameLogic {
 	//score
 	private score = 0;
 
+	//slide animation speed - ms
+	private animSpeed = 120;
+
 	constructor(tiles: Tile[] | undefined, setTiles: React.Dispatch<React.SetStateAction<Tile[] | undefined>>) {
 		this.tiles = tiles;
 		//to set state from in here
@@ -41,7 +44,7 @@ class GameLogic {
 	}
 
 	startGame() {
-		//reset all tiles
+		// reset all tiles
 		this.tiles?.forEach((tile) => {
 			tile.setValue(0);
 		});
@@ -93,7 +96,7 @@ class GameLogic {
 		const tileElement: HTMLDivElement | null = tile.tileRef.current;
 		if (tileElement != null) {
 			const style = tileElement.style;
-			style.transition = "0.1s";
+			style.transition = (this.animSpeed / 1000).toString() + "s";
 
 			const { top: top1, left: left1 } = tileElement.getBoundingClientRect();
 
@@ -118,7 +121,7 @@ class GameLogic {
 
 				//to re-render
 				this.setStateTiles(this.generateTiles());
-			}, 100);
+			}, this.animSpeed);
 		}
 	}
 

@@ -12,8 +12,8 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  --grid-background-color: #cdc1b4;
-  --grid-border-color: rgb(165, 145, 121);
-  --tile-size: 8vw;
+  --grid-background-color: #d3c4b5;
+  --grid-border-color: #b6a697;
+  --tile-size: 7.5vw;
 }
 

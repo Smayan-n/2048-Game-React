@@ -12,7 +12,10 @@ function ControlSection(props: ControlSectionProps) {
 	return (
 		<>
 			<section className="control-section">
-				<section className="title-section">2048</section>
+				<section className="title-section">
+					<div className="title">2048</div>
+					<div className="description">Merge tiles to get to 2048!</div>
+				</section>
 				<section className="right-section">
 					<div className="display-section">
 						<div className="score-div">

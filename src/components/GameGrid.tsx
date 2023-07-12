@@ -50,7 +50,7 @@ function GameGrid(props: GameGridProps) {
 						//if .getScore() results in a falsy value, 0 will be used instead
 						onScoreChange(game?.getScore() || 0);
 					}
-				}, 110);
+				}, 130);
 			}
 		},
 		[game, onScoreChange]

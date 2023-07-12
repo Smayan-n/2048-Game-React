@@ -11,18 +11,25 @@ function GameTile(props: GameTileProps) {
 
 	//for color of tile based on value
 	const tileColorMap: { [key: number]: string } = {
-		2: "#893d3c",
-		4: "orange",
-		8: "green",
-		16: "blue",
-		32: "purple",
-		64: "red",
-		128: "yellow",
-		256: "brown",
-		512: "pink",
-		1024: "black",
-		2048: "white",
+		2: "#EEE4DA",
+		4: "#EDE0C8",
+		8: "#F2B179",
+		16: "#F59563",
+		32: "#F67C5F",
+		64: "#F65E3B",
+		128: "#EDCF72",
+		256: "#EDCC61",
+		512: "#EDC850",
+		1024: "#EDC53F",
+		2048: "#EDC22E",
+		4096: "#3C3A32",
+		8192: "#BB8D00",
+		16384: "#C18300",
+		32768: "#C77A00",
+		65536: "#CD7000",
+		// Add more tiles and colors as needed
 	};
+
 	//render tile only if value is not 0
 	return (
 		<>
@@ -30,7 +37,12 @@ function GameTile(props: GameTileProps) {
 				<div
 					ref={tile.tileRef}
 					className={`game-tile ${tile.isFirst() ? "grow-anim" : ""} ${tile.isMerged() ? "pop-anim" : ""}`}
-					style={{ gridRow: row, gridColumn: col, backgroundColor: tileColorMap[value] }}
+					style={{
+						gridRow: row,
+						gridColumn: col,
+						backgroundColor: tileColorMap[value],
+						color: value < 32 ? "#776e65" : "white",
+					}}
 				>
 					{value}
 				</div>
