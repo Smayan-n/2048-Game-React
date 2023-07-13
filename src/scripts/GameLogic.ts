@@ -38,8 +38,12 @@ class GameLogic {
 	}
 	generateTiles() {
 		//convert 2d array into 1d array
-		// this.tiles = this.tiles2d?.flat();
 		return this.tiles2d?.flat();
+		// const tilesFlat = this.tiles2d?.flat();
+		// const tiles = tilesFlat?.map((tile) => {
+		// 	return tile.clone();
+		// });
+		// return tiles;
 	}
 
 	#resetGame() {
@@ -71,7 +75,7 @@ class GameLogic {
 			//TODO - can be used to detect if game is over
 			searches++;
 			if (searches >= 16) {
-				return;
+				return null;
 			}
 		}
 		//RULE: 10% of the time, a new tile can be a 4

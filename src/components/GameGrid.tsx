@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import GameLogic from "../scripts/GameLogic";
 import Tile from "../scripts/Tile";
 import "../styles/GameGrid.css";
@@ -11,10 +11,23 @@ interface GameGridProps {
 	onScoreChange: (newScore: number) => void;
 }
 
+interface GameEndVerification {
+	ArrowUp: boolean;
+	ArrowDown: boolean;
+	ArrowLeft: boolean;
+	ArrowRight: boolean;
+}
+
 function GameGrid(props: GameGridProps) {
 	const { game, setGame, onScoreChange } = props;
 	//state to update tiles on board
 	const [tiles, setTiles] = useState<Tile[] | undefined>([]);
+	const gameEndVerificationRef = useRef<GameEndVerification>({
+		ArrowUp: false,
+		ArrowDown: false,
+		ArrowLeft: false,
+		ArrowRight: false,
+	});
 
 	useEffect(() => {
 		//setup game object
@@ -42,6 +55,24 @@ function GameGrid(props: GameGridProps) {
 						//update score each time a tile is moved
 						//if .getScore() results in a falsy value, 0 will be used instead
 						onScoreChange(game?.getScore() || 0);
+
+						//reset game end verification
+						gameEndVerificationRef.current = {
+							ArrowDown: false,
+							ArrowLeft: false,
+							ArrowRight: false,
+							ArrowUp: false,
+						};
+					} else {
+						//check if game has ended
+						const gameEndVerification = gameEndVerificationRef.current;
+						gameEndVerification[direction] = true;
+						if (Object.values(gameEndVerification).every((value) => value)) {
+							//game has ended
+							window.alert("Game Over! Try again?");
+							game?.startGame();
+							onScoreChange(0);
+						}
 					}
 				}, 100 * 1.5);
 			}

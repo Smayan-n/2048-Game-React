@@ -6,9 +6,19 @@ interface GameTileProps {
 	tile: Tile;
 }
 
+const usePreviousValue = (value: number) => {
+	const ref = useRef<number>();
+	useEffect(() => {
+		ref.current = value;
+	});
+	return ref.current;
+};
+
 function GameTile(props: GameTileProps) {
 	const { tile } = props;
 	const [row, col, value] = [tile.getRow(), tile.getCol(), tile.getValue()];
+
+	// const prevValue = usePreviousValue(value);
 
 	//for color of tile based on value
 	const tileColorMap: { [key: number]: string } = {

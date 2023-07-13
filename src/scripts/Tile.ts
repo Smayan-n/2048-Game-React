@@ -64,6 +64,11 @@ class Tile {
 	getKey() {
 		return Math.random().toString();
 	}
+
+	clone(): Tile {
+		const clonedTile = new Tile(this.row, this.col, this.value);
+		return clonedTile;
+	}
 }
 
 export default Tile;

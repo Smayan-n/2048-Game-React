@@ -23,7 +23,6 @@ function ControlSection(props: ControlSectionProps) {
 
 	useEffect(() => {
 		setScoreAddVisible(true);
-		console.log("score add visible");
 		setTimeout(() => {
 			setScoreAddVisible(false);
 		}, 300);
