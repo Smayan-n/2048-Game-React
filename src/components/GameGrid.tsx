@@ -13,18 +13,12 @@ interface GameGridProps {
 
 function GameGrid(props: GameGridProps) {
 	const { game, setGame, onScoreChange } = props;
+	//state to update tiles on board
 	const [tiles, setTiles] = useState<Tile[] | undefined>([]);
 
 	useEffect(() => {
-		//setup array of Tile objects when component mounts
-		const tiles: Tile[] = [];
-		for (let r = 1; r < 5; r++) {
-			for (let c = 1; c < 5; c++) {
-				tiles.push(new Tile(r, c, 0));
-			}
-		}
-		setTiles(tiles);
-		setGame(new GameLogic(tiles, setTiles));
+		//setup game object
+		setGame(new GameLogic(setTiles));
 
 		//cleanup
 		return () => {
@@ -32,13 +26,36 @@ function GameGrid(props: GameGridProps) {
 		};
 	}, [setGame]);
 
+	const handleMove = useCallback(
+		(direction: string) => {
+			if (
+				direction === "ArrowUp" ||
+				direction === "ArrowDown" ||
+				direction === "ArrowLeft" ||
+				direction === "ArrowRight"
+			) {
+				const generateNew = game?.slide(direction);
+				// generate new tile - should only generate when at least 1 tile has moved
+				setTimeout(() => {
+					if (generateNew) {
+						game?.addNewTile();
+						//update score each time a tile is moved
+						//if .getScore() results in a falsy value, 0 will be used instead
+						onScoreChange(game?.getScore() || 0);
+					}
+				}, 100 * 1.5);
+			}
+		},
+		[game, onScoreChange]
+	);
+
 	//handle keyboard key press
 	//TODO: prevent key hold
 	const handleKeyPress = useCallback(
 		(event: KeyboardEvent) => {
 			handleMove(event.key);
 		},
-		[game, onScoreChange]
+		[handleMove]
 	);
 
 	useEffect(() => {
@@ -48,26 +65,6 @@ function GameGrid(props: GameGridProps) {
 			document.removeEventListener("keydown", handleKeyPress, true);
 		};
 	}, [handleKeyPress]);
-
-	const handleMove = (direction: string) => {
-		if (
-			direction === "ArrowUp" ||
-			direction === "ArrowDown" ||
-			direction === "ArrowLeft" ||
-			direction === "ArrowRight"
-		) {
-			const generateNew = game?.slide(direction);
-			// generate new tile - should only generate when at least 1 tile has moved
-			setTimeout(() => {
-				if (generateNew) {
-					game?.addNewTile();
-					//update score each time a tile is moved
-					//if .getScore() results in a falsy value, 0 will be used instead
-					onScoreChange(game?.getScore() || 0);
-				}
-			}, 140);
-		}
-	};
 
 	//--------------------------------------------------------------------------------
 	const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe(handleMove);
@@ -93,8 +90,9 @@ function GameGrid(props: GameGridProps) {
 				<div className="grid-cell"></div>
 
 				<div className="tile-grid">
+					{/*render only if value is not 0 */}
 					{tiles?.map((tile) => {
-						return <GameTile key={tile.getKey()} tile={tile} />;
+						return tile.getValue() === 0 ? "" : <GameTile key={tile.getKey()} tile={tile} />;
 					})}
 				</div>
 			</div>

@@ -57,7 +57,21 @@
     font-size:1.2vw;
     min-width: 6vw;
     color: #e4d9cb;
+    position: relative;
 }
+
+.score-add-div{
+    position: absolute;
+    color: white;
+    top: 2.4vw;
+    left: -0.3vw;
+    font-size: 1.6vw;
+    animation: float-up-anim 1.2s ease-out;
+
+}
+
+
+
 
 .score-text{
     font-size: 1.8vw;
@@ -89,4 +103,16 @@
 .start-btn:hover{
     background-color: green
 
+}
+
+@keyframes float-up-anim {
+    0% {
+      transform: translateY(0);
+    }
+    100%{
+      transform: translateY(-120px);
+      opacity: 0.4;
+
+    }
+    
 }

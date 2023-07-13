@@ -1,3 +1,4 @@
+import React, { useEffect, useRef } from "react";
 import Tile from "../scripts/Tile";
 import "../styles/GameTile.css";
 

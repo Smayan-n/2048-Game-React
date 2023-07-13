@@ -53,20 +53,11 @@ class Tile {
 	}
 
 	isMerged() {
-		const val = this.tileMerged;
-		//set tileMerged to false after 300ms to avoid animation issues
-		setTimeout(() => {
-			this.tileMerged = false;
-		}, 300);
-		return val;
+		return this.tileMerged;
 	}
 
 	isFirst() {
-		const val = this.firstTile;
-		setTimeout(() => {
-			this.firstTile = false;
-		}, 300);
-		return val;
+		return this.firstTile;
 	}
 
 	//generates a unique key for the tile

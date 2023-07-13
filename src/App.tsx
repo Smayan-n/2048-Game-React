@@ -8,6 +8,7 @@ function App() {
 	const [game, setGame] = useState<GameLogic | null>(null);
 	const [score, setScore] = useState<number>(-1);
 	const [highScore, setHighScore] = useState<number>(0);
+	const [scoreDiff, setScoreDiff] = useState<number>(0);
 
 	//for storage and retrieval of high score
 	useEffect(() => {
@@ -40,6 +41,7 @@ function App() {
 	});
 
 	const handleScoreChange = (newScore: number) => {
+		setScoreDiff(newScore - score);
 		setScore(newScore);
 		//update high score if new score is higher
 		if (newScore > highScore) {
@@ -55,7 +57,12 @@ function App() {
 	return (
 		<>
 			<section className="game-grid-section">
-				<ControlSection onGameStart={handleGameStart} score={score} highScore={highScore} />
+				<ControlSection
+					onGameStart={handleGameStart}
+					score={score}
+					highScore={highScore}
+					scoreDiff={scoreDiff}
+				/>
 				<GameGrid game={game} setGame={setGame} onScoreChange={handleScoreChange} />
 			</section>
 		</>

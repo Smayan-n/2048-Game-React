@@ -1,13 +1,33 @@
+import { useEffect, useRef, useState } from "react";
 import "../styles/ControlSection.css";
-
 interface ControlSectionProps {
 	onGameStart: () => void;
 	score: number;
 	highScore: number;
+	scoreDiff: number;
 }
 
+//custom hook to get previous value of a hook
+// const usePreviousValue = (value: number) => {
+// 	const ref = useRef<number>();
+// 	useEffect(() => {
+// 		ref.current = value;
+// 	});
+// 	return ref.current;
+// };
+
 function ControlSection(props: ControlSectionProps) {
-	const { onGameStart, score, highScore } = props;
+	const { onGameStart, score, highScore, scoreDiff } = props;
+	const [scoreAddVisible, setScoreAddVisible] = useState<boolean>(true);
+	// const prevScore = usePreviousValue(score);
+
+	useEffect(() => {
+		setScoreAddVisible(true);
+		console.log("score add visible");
+		setTimeout(() => {
+			setScoreAddVisible(false);
+		}, 300);
+	}, [score]);
 
 	return (
 		<>
@@ -21,6 +41,7 @@ function ControlSection(props: ControlSectionProps) {
 						<div className="score-div">
 							Score
 							<div className="score-text">{score === -1 ? 0 : score}</div>
+							{scoreAddVisible && score > 0 ? <div className="score-add-div">+{scoreDiff}</div> : ""}
 						</div>
 						<div className="high-score-div">
 							High Score

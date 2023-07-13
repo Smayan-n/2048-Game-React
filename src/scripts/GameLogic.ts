@@ -2,7 +2,6 @@ import Tile from "./Tile";
 import { Position, TileSlidePosition } from "./Utility";
 
 class GameLogic {
-	private tiles: Tile[] | undefined;
 	private setStateTiles: React.Dispatch<React.SetStateAction<Tile[] | undefined>>;
 	private tiles2d: Tile[][] | null;
 
@@ -12,8 +11,7 @@ class GameLogic {
 	//slide animation speed - ms
 	private animSpeed = 120;
 
-	constructor(tiles: Tile[] | undefined, setTiles: React.Dispatch<React.SetStateAction<Tile[] | undefined>>) {
-		this.tiles = tiles;
+	constructor(setTiles: React.Dispatch<React.SetStateAction<Tile[] | undefined>>) {
 		//to set state from in here
 		this.setStateTiles = setTiles;
 		this.tiles2d = null;
@@ -31,24 +29,32 @@ class GameLogic {
 			[new Tile(0, 0, 0), new Tile(0, 0, 0), new Tile(0, 0, 0), new Tile(0, 0, 0)],
 			[new Tile(0, 0, 0), new Tile(0, 0, 0), new Tile(0, 0, 0), new Tile(0, 0, 0)],
 		];
-		this.tiles?.forEach((tile) => {
-			//! is for null check
-			t2d[tile.getRow() - 1][tile.getCol() - 1] = tile;
-		});
+		for (let r = 1; r < 5; r++) {
+			for (let c = 1; c < 5; c++) {
+				t2d[r - 1][c - 1] = new Tile(r, c, 0);
+			}
+		}
 		this.tiles2d = t2d;
 	}
 	generateTiles() {
 		//convert 2d array into 1d array
-		this.tiles = this.tiles2d?.flat();
-		return this.tiles;
+		// this.tiles = this.tiles2d?.flat();
+		return this.tiles2d?.flat();
+	}
+
+	#resetGame() {
+		this.tiles2d?.forEach((row) => {
+			row.forEach((tile) => {
+				tile.setValue(0);
+			});
+		});
+		this.score = 0;
 	}
 
 	startGame() {
 		// reset all tiles
-		this.tiles?.forEach((tile) => {
-			tile.setValue(0);
-		});
-		this.score = 0;
+		this.#resetGame();
+		//add 2 tiles to start
 		this.addNewTile();
 		this.addNewTile();
 	}
@@ -77,16 +83,29 @@ class GameLogic {
 		this.tiles2d![r - 1][c - 1].setValue(newValue);
 		this.tiles2d![r - 1][c - 1].firstTile = true;
 		this.setStateTiles(this.generateTiles());
+		this.resetAnimationFlags();
+	}
+
+	resetAnimationFlags() {
+		//reset firstTile and tileMerged
+		setTimeout(() => {
+			this.tiles2d?.forEach((row) => {
+				row.forEach((tile) => {
+					tile.firstTile = false;
+					tile.tileMerged = false;
+				});
+			});
+		}, this.animSpeed * 1.5);
 	}
 
 	slide(keyPress: string) {
 		//TODO
-		const slidePositions = this.getTileSlidePositions(this.tiles2d!, keyPress);
+		const slidePositions = this.getTileSlidePositions(keyPress);
 		slidePositions.forEach((pos) => {
 			this.#slideAnimation(pos.tile, pos.from, pos.to);
 		});
 
-		this.setStateTiles(this.tiles);
+		this.resetAnimationFlags();
 
 		//return whether a new tile should be generated
 		return slidePositions.length > 0;
@@ -115,17 +134,19 @@ class GameLogic {
 			//after animation update to right coordinates
 			setTimeout(() => {
 				style.transition = "auto";
+				style.gridRow = to.row.toString();
+				style.gridColumn = to.col.toString();
 
 				style.top = "0";
 				style.left = "0";
 
 				//to re-render
-				this.setStateTiles(this.generateTiles());
+				// this.setStateTiles(this.generateTiles());
 			}, this.animSpeed);
 		}
 	}
 
-	getTileSlidePositions(tiles: Tile[][], direction: string): TileSlidePosition[] {
+	getTileSlidePositions(direction: string): TileSlidePosition[] {
 		const tileSlidePositions: TileSlidePosition[] = [];
 
 		const addPosition = (tile: Tile, toPos: Position, flag: boolean) => {
@@ -139,7 +160,7 @@ class GameLogic {
 				tileSlidePositions.push(pos);
 				//update tile here itself so the next search will be successful
 				//also update score
-				const mergeScore = tile.slideTile(tiles[toPos.row - 1][toPos.col - 1], flag);
+				const mergeScore = tile.slideTile(this.tiles2d![toPos.row - 1][toPos.col - 1], flag);
 				this.score += mergeScore;
 			}
 		};
@@ -150,15 +171,18 @@ class GameLogic {
 				//loop columns from left to right
 				for (let c = 1; c < 4; c++) {
 					for (let r = 0; r < 4; r++) {
-						const tile = tiles[r][c];
+						const tile = this.tiles2d![r][c];
 						if (!tile.isEmpty()) {
 							let col = c - 1;
-							while (col > 0 && tiles[r][col].isEmpty()) {
+							while (col > 0 && this.tiles2d![r][col].isEmpty()) {
 								col--;
 							}
 							let flag = false;
-							if (!tiles[r][col].isEmpty()) {
-								if (tiles[r][col].getValue() === tile.getValue()) {
+							if (!this.tiles2d![r][col].isEmpty()) {
+								if (
+									this.tiles2d![r][col].getValue() === tile.getValue() &&
+									!this.tiles2d![r][col].isMerged()
+								) {
 									col--;
 									flag = true;
 								}
@@ -174,15 +198,18 @@ class GameLogic {
 				//loop columns from right to left
 				for (let c = 2; c >= 0; c--) {
 					for (let r = 3; r >= 0; r--) {
-						const tile = tiles[r][c];
+						const tile = this.tiles2d![r][c];
 						if (!tile.isEmpty()) {
 							let col = c + 1;
-							while (col < 3 && tiles[r][col].isEmpty()) {
+							while (col < 3 && this.tiles2d![r][col].isEmpty()) {
 								col++;
 							}
 							let flag = false;
-							if (!tiles[r][col].isEmpty()) {
-								if (tiles[r][col].getValue() === tile.getValue()) {
+							if (!this.tiles2d![r][col].isEmpty()) {
+								if (
+									this.tiles2d![r][col].getValue() === tile.getValue() &&
+									!this.tiles2d![r][col].isMerged()
+								) {
 									col++;
 									flag = true;
 								}
@@ -198,15 +225,18 @@ class GameLogic {
 				//loop rows from top to bottom
 				for (let r = 1; r < 4; r++) {
 					for (let c = 0; c < 4; c++) {
-						const tile = tiles[r][c];
+						const tile = this.tiles2d![r][c];
 						if (!tile.isEmpty()) {
 							let row = r - 1;
-							while (row > 0 && tiles[row][c].isEmpty()) {
+							while (row > 0 && this.tiles2d![row][c].isEmpty()) {
 								row--;
 							}
 							let flag = false;
-							if (!tiles[row][c].isEmpty()) {
-								if (tiles[row][c].getValue() === tile.getValue()) {
+							if (!this.tiles2d![row][c].isEmpty()) {
+								if (
+									this.tiles2d![row][c].getValue() === tile.getValue() &&
+									!this.tiles2d![row][c].isMerged()
+								) {
 									row--;
 									flag = true;
 								}
@@ -222,15 +252,18 @@ class GameLogic {
 				//loop rows from bottom to top
 				for (let r = 2; r >= 0; r--) {
 					for (let c = 3; c >= 0; c--) {
-						const tile = tiles[r][c];
+						const tile = this.tiles2d![r][c];
 						if (!tile.isEmpty()) {
 							let row = r + 1;
-							while (row < 3 && tiles[row][c].isEmpty()) {
+							while (row < 3 && this.tiles2d![row][c].isEmpty()) {
 								row++;
 							}
 							let flag = false;
-							if (!tiles[row][c].isEmpty()) {
-								if (tiles[row][c].getValue() === tile.getValue()) {
+							if (!this.tiles2d![row][c].isEmpty()) {
+								if (
+									this.tiles2d![row][c].getValue() === tile.getValue() &&
+									!this.tiles2d![row][c].isMerged()
+								) {
 									row++;
 									flag = true;
 								}

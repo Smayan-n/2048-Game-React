@@ -7,7 +7,7 @@ interface SwipeOutput {
 }
 
 const useSwipe = (onSwipe: (direction: string) => void): SwipeOutput => {
-	const minSwipeDistance = 20;
+	const minSwipeDistance = 50;
 	const [touchStart, setTouchStart] = useState<number>(0);
 	const [touchEnd, setTouchEnd] = useState<number>(0);
 	const [touchVertStart, setTouchVertStart] = useState<number>(0);
