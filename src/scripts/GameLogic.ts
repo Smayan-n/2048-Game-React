@@ -67,16 +67,9 @@ class GameLogic {
 		//adds new tile when game is running that does not overlap with existing tiles
 		let r = this.randIdx();
 		let c = this.randIdx();
-		let searches = 0;
 		while (!this.tiles2d![r - 1][c - 1].isEmpty()) {
 			r = this.randIdx();
 			c = this.randIdx();
-			//to prevent infinite loop when no empty tiles are left
-			//TODO - can be used to detect if game is over
-			searches++;
-			if (searches >= 16) {
-				return null;
-			}
 		}
 		//RULE: 10% of the time, a new tile can be a 4
 		const prob = Math.random();

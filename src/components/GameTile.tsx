@@ -1,4 +1,3 @@
-import React, { useEffect, useRef } from "react";
 import Tile from "../scripts/Tile";
 import "../styles/GameTile.css";
 
@@ -6,13 +5,13 @@ interface GameTileProps {
 	tile: Tile;
 }
 
-const usePreviousValue = (value: number) => {
-	const ref = useRef<number>();
-	useEffect(() => {
-		ref.current = value;
-	});
-	return ref.current;
-};
+// const usePreviousValue = (value: number) => {
+// 	const ref = useRef<number>();
+// 	useEffect(() => {
+// 		ref.current = value;
+// 	});
+// 	return ref.current;
+// };
 
 function GameTile(props: GameTileProps) {
 	const { tile } = props;
