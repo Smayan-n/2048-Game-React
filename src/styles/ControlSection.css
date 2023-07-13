@@ -88,7 +88,7 @@
 }
 
 .start-btn{
-    background-color: rgb(6, 102, 6);
+    background-color: var(--grid-border-color);
     padding: 0.8vw;
     font-size: 1.5vw;
     font-weight: 300;
@@ -101,7 +101,7 @@
 }
 
 .start-btn:hover{
-    background-color: green
+    background-color: var(--grid-background-color)
 
 }
 

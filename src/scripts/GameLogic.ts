@@ -3,6 +3,7 @@ import { Position, TileSlidePosition } from "./Utility";
 
 class GameLogic {
 	private setStateTiles: React.Dispatch<React.SetStateAction<Tile[] | undefined>>;
+	private setGameEnded: React.Dispatch<React.SetStateAction<boolean>>;
 	private tiles2d: Tile[][] | null;
 
 	//score
@@ -11,9 +12,13 @@ class GameLogic {
 	//slide animation speed - ms
 	private animSpeed = 120;
 
-	constructor(setTiles: React.Dispatch<React.SetStateAction<Tile[] | undefined>>) {
+	constructor(
+		setTiles: React.Dispatch<React.SetStateAction<Tile[] | undefined>>,
+		setGameEnded: React.Dispatch<React.SetStateAction<boolean>>
+	) {
 		//to set state from in here
 		this.setStateTiles = setTiles;
+		this.setGameEnded = setGameEnded;
 		this.tiles2d = null;
 		this.generate2DTiles();
 	}
@@ -39,11 +44,6 @@ class GameLogic {
 	generateTiles() {
 		//convert 2d array into 1d array
 		return this.tiles2d?.flat();
-		// const tilesFlat = this.tiles2d?.flat();
-		// const tiles = tilesFlat?.map((tile) => {
-		// 	return tile.clone();
-		// });
-		// return tiles;
 	}
 
 	#resetGame() {
@@ -53,23 +53,47 @@ class GameLogic {
 			});
 		});
 		this.score = 0;
+		this.setGameEnded(false);
 	}
 
 	startGame() {
 		// reset all tiles
 		this.#resetGame();
 		//add 2 tiles to start
-		this.addNewTile();
-		this.addNewTile();
+		// this.addNewTile();
+		// this.addNewTile();
+		this.tiles2d![0][0].setValue(2);
+		this.tiles2d![0][1].setValue(2);
+		this.tiles2d![0][2].setValue(4);
+		this.tiles2d![0][3].setValue(5);
+		this.tiles2d![1][0].setValue(6);
+		this.tiles2d![1][1].setValue(7);
+		this.tiles2d![1][2].setValue(8);
+		this.tiles2d![1][3].setValue(9);
+		this.tiles2d![2][0].setValue(10);
+		this.tiles2d![2][1].setValue(11);
+		this.tiles2d![2][2].setValue(12);
+		this.tiles2d![2][3].setValue(13);
+		this.tiles2d![3][0].setValue(14);
+		this.tiles2d![3][1].setValue(15);
+		this.tiles2d![3][2].setValue(16);
+		this.tiles2d![3][3].setValue(17);
+		this.setStateTiles(this.generateTiles());
 	}
 
 	addNewTile() {
 		//adds new tile when game is running that does not overlap with existing tiles
 		let r = this.randIdx();
 		let c = this.randIdx();
+		let searches = 0;
 		while (!this.tiles2d![r - 1][c - 1].isEmpty()) {
 			r = this.randIdx();
 			c = this.randIdx();
+			//to prevent game freeze from infinite loop
+			searches++;
+			if (searches > 10000) {
+				return false;
+			}
 		}
 		//RULE: 10% of the time, a new tile can be a 4
 		const prob = Math.random();

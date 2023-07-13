@@ -28,10 +28,11 @@ function GameGrid(props: GameGridProps) {
 		ArrowLeft: false,
 		ArrowRight: false,
 	});
+	const [gameEnded, setGameEnded] = useState<boolean>(false);
 
 	useEffect(() => {
 		//setup game object
-		setGame(new GameLogic(setTiles));
+		setGame(new GameLogic(setTiles, setGameEnded));
 
 		//cleanup
 		return () => {
@@ -69,9 +70,7 @@ function GameGrid(props: GameGridProps) {
 						gameEndVerification[direction] = true;
 						if (Object.values(gameEndVerification).every((value) => value)) {
 							//game has ended
-							window.alert("Game Over! Try again?");
-							game?.startGame();
-							onScoreChange(0);
+							setGameEnded(true);
 						}
 					}
 				}, 100 * 1.5);
@@ -96,6 +95,12 @@ function GameGrid(props: GameGridProps) {
 			document.removeEventListener("keydown", handleKeyPress, true);
 		};
 	}, [handleKeyPress]);
+
+	const handleGameRestart = () => {
+		game?.startGame();
+		onScoreChange(0);
+		setGameEnded(false);
+	};
 
 	//--------------------------------------------------------------------------------
 	const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe(handleMove);
@@ -126,6 +131,17 @@ function GameGrid(props: GameGridProps) {
 						return tile.getValue() === 0 ? "" : <GameTile key={tile.getKey()} tile={tile} />;
 					})}
 				</div>
+				{/*render only if game has ended */}
+				{gameEnded ? (
+					<div className="game-over-screen">
+						Game Over!
+						<button onClick={handleGameRestart} className="restart-btn">
+							Try Again
+						</button>
+					</div>
+				) : (
+					""
+				)}
 			</div>
 		</>
 	);
