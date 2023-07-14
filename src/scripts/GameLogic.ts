@@ -60,25 +60,8 @@ class GameLogic {
 		// reset all tiles
 		this.#resetGame();
 		//add 2 tiles to start
-		// this.addNewTile();
-		// this.addNewTile();
-		this.tiles2d![0][0].setValue(2);
-		this.tiles2d![0][1].setValue(2);
-		this.tiles2d![0][2].setValue(4);
-		this.tiles2d![0][3].setValue(5);
-		this.tiles2d![1][0].setValue(6);
-		this.tiles2d![1][1].setValue(7);
-		this.tiles2d![1][2].setValue(8);
-		this.tiles2d![1][3].setValue(9);
-		this.tiles2d![2][0].setValue(10);
-		this.tiles2d![2][1].setValue(11);
-		this.tiles2d![2][2].setValue(12);
-		this.tiles2d![2][3].setValue(13);
-		this.tiles2d![3][0].setValue(14);
-		this.tiles2d![3][1].setValue(15);
-		this.tiles2d![3][2].setValue(16);
-		this.tiles2d![3][3].setValue(17);
-		this.setStateTiles(this.generateTiles());
+		this.addNewTile();
+		this.addNewTile();
 	}
 
 	addNewTile() {
